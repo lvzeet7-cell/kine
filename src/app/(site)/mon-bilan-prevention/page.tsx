@@ -80,7 +80,7 @@ export default function MonBilanPreventionPage() {
       {/* Bannière : photo pleine largeur fondue vers la gauche, texte posé dessus */}
       <section aria-labelledby="bilan-title" className="relative isolate overflow-hidden bg-paper">
         <div className="relative h-64 xs:h-72 sm:h-96 lg:absolute lg:inset-y-0 lg:right-0 lg:-z-10 lg:h-auto lg:w-[66%]">
-          <Image
+          <Image quality={90}
             src="/images/bilan-prevention.jpg"
             alt="Kinésithérapeute posant les mains sur le dos et l'épaule d'un patient, devant des affiches de prévention"
             fill
@@ -157,7 +157,7 @@ export default function MonBilanPreventionPage() {
       <section aria-labelledby="pour-qui" className="py-section-sm">
         <div className="container-page grid gap-10 lg:grid-cols-12 lg:gap-14">
           <figure className="order-2 mx-auto w-full max-w-[22rem] lg:order-1 lg:col-span-4 lg:max-w-none lg:self-start">
-            <Image
+            <Image quality={90}
               src="/images/affiche-campagne-bilan-prevention.jpg"
               alt="Affiche de la campagne nationale « Mon Bilan Prévention — J'ai rendez-vous avec ma santé ! » : quatre personnes de différents âges devant des portes colorées, avec les tranches d'âge concernées. Renseignez-vous sur monbilanprevention.sante.gouv.fr."
               width={1102}

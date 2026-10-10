@@ -19,7 +19,7 @@ export function Hero() {
     <section aria-labelledby="hero-title" className="relative isolate overflow-hidden bg-paper">
       {photo.src && (
         <div className="relative h-60 xs:h-72 sm:h-96 lg:absolute lg:inset-y-0 lg:right-0 lg:-z-10 lg:h-auto lg:w-[74%]">
-          <Image
+          <Image quality={90}
             src={photo.src}
             alt={photo.alt}
             fill

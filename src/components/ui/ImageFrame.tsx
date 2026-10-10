@@ -20,7 +20,7 @@ export function ImageFrame({ image, aspect = "aspect-[4/5]", className, sizes = 
   return (
     <div className={cn("relative overflow-hidden rounded-media bg-mist", aspect, className)}>
       {image.src ? (
-        <Image
+        <Image quality={90}
           src={image.src}
           alt={image.alt}
           fill

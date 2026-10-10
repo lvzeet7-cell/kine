@@ -54,7 +54,7 @@ export function SoinsHero({ badge, title, intro, features = [], image, card, act
             !reverse && (signature ? "lg:right-[16%] lg:w-[50%]" : "lg:w-[56%]"),
           )}
         >
-          <Image
+          <Image quality={90}
             src={image.src}
             alt={image.alt}
             fill

@@ -48,7 +48,7 @@ export default async function ServicePage({ params }: Props) {
       >
         {service.logo && (
           <div className="mt-8 inline-flex h-24 items-center rounded-card border border-line bg-white px-5 py-3 sm:h-28">
-            <Image
+            <Image quality={90}
               src={service.logo.src}
               alt={service.logo.alt}
               width={service.logo.width}

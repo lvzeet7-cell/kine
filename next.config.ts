@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
   eslint: { ignoreDuringBuilds: true },
   images: {
     formats: ["image/avif", "image/webp"],
+    // Qualité élevée pour les photos (90 au lieu de 75 par défaut)
+    qualities: [90],
   },
   async headers() {
     return [

@@ -13,7 +13,7 @@ export function ServiceCard({ service, headingLevel = "h3" }: { service: Service
     <article className="group relative flex h-full flex-col bg-surface p-7 transition-colors duration-200 hover:bg-[rgb(var(--petrol-soft)/0.45)] sm:p-8">
       {service.logo ? (
         <span className="flex h-20 w-fit items-center rounded-card border border-line bg-white px-4 py-2.5">
-          <Image
+          <Image quality={90}
             src={service.logo.src}
             alt={service.logo.alt}
             width={service.logo.width}

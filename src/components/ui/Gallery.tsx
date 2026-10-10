@@ -6,7 +6,7 @@ import { Icon } from "@/components/ui/Icon";
 function Tile({ image, sizes }: { image: SiteImage; sizes: string }) {
   if (image.src) {
     return (
-      <Image
+      <Image quality={90}
         src={image.src}
         alt={image.alt}
         fill

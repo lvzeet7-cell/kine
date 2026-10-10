@@ -115,7 +115,7 @@ export function Footer({ openingDays }: { openingDays: OpeningDay[] }) {
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:gap-6">
           <span className="inline-flex w-fit rounded-control bg-white px-4 py-2">
-            <Image
+            <Image quality={90}
               src="/images/logo-ordre-mk.png"
               alt="Ordre des masseurs-kinésithérapeutes"
               width={1126}

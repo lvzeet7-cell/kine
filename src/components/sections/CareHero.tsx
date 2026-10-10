@@ -33,7 +33,7 @@ export function CareHero({ hero, crumbs, bookingHref = "/rendez-vous" }: { hero:
 
       <section aria-labelledby="care-title" className="relative isolate overflow-hidden bg-paper">
         <div className="relative h-64 xs:h-72 sm:h-96 lg:absolute lg:inset-y-0 lg:right-0 lg:-z-10 lg:h-auto lg:w-[60%]">
-          <Image
+          <Image quality={90}
             src={hero.image.src}
             alt={hero.image.alt}
             fill
