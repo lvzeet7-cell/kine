@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   PALETTE CENTRALE — modifiez les couleurs du site ici uniquement.
+   Valeurs au format « R G B » (sans virgule) pour gérer la transparence.
+   ========================================================================== */
+:root {
+  --paper: 247 247 244;        /* #F7F7F4 — fond ivoire froid */
+  --surface: 255 255 255;      /* #FFFFFF — cartes, panneaux */
+  --mist: 237 241 239;         /* #EDF1EF — gris-vert très clair */
+  --line: 220 226 223;         /* #DCE2DF — filets, bordures */
+  --ink: 30 42 47;             /* #1E2A2F — anthracite (texte) */
+  --muted: 84 97 104;          /* #546168 — texte secondaire */
+
+  --petrol: 18 75 87;          /* #124B57 — bleu pétrole (principal) */
+  --petrol-deep: 12 53 63;     /* #0C353F — fonds foncés, survol */
+  --petrol-soft: 228 238 240;  /* #E4EEF0 — fonds teintés */
+
+  --sage: 157 179 165;         /* #9DB3A5 — vert sauge (décor) */
+  --sage-deep: 72 102 85;      /* #486655 — sauge lisible sur clair */
+  --sage-soft: 234 240 235;    /* #EAF0EB — fonds sauge */
+
+  --danger: 166 50 43;         /* #A6322B */
+  --warning: 138 90 0;         /* #8A5A00 — statut « en attente » */
+  --warning-soft: 252 243 224; /* #FCF3E0 */
+  --success: 44 110 73;        /* #2C6E49 */
+
+  --header-h: 5rem;
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem;
+  }
+  @media (min-width: 1280px) {
+    html {
+      scroll-padding-top: 8.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    @apply bg-paper font-sans text-body text-ink antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01" on;
+  }
+
+  ::selection {
+    background: rgb(var(--petrol) / 0.16);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-semibold text-ink;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Focus clavier visible et cohérent */
+  :focus-visible {
+    outline: 2px solid rgb(var(--petrol));
+    outline-offset: 3px;
+    border-radius: 0.375rem;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: rgb(255 255 255);
+  }
+
+  summary {
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  dialog::backdrop {
+    background: rgb(var(--petrol-deep) / 0.55);
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-page px-5 sm:px-8 lg:px-10;
+  }
+
+  /* Petit libellé (utilisé avec parcimonie) */
+  .kicker {
+    @apply text-micro font-semibold text-sage-deep;
+  }
+
+  /* Liens de texte */
+  .link {
+    @apply font-medium text-petrol underline decoration-petrol/30 decoration-1 underline-offset-4 transition-colors duration-200 hover:decoration-petrol;
+  }
+
+  /* Contenu éditorial (pages légales, soins) */
+  .prose-kine {
+    @apply max-w-prose text-body text-ink/90;
+  }
+  .prose-kine h2 {
+    @apply mb-4 mt-14 text-[1.5rem] leading-tight first:mt-0;
+  }
+  .prose-kine h3 {
+    @apply mb-2 mt-8 text-h3;
+  }
+  .prose-kine p {
+    @apply mb-4;
+  }
+  .prose-kine ul {
+    @apply mb-5 space-y-2 pl-5;
+    list-style: disc;
+  }
+  .prose-kine li::marker {
+    color: rgb(var(--sage-deep));
+  }
+  .prose-kine a {
+    @apply link;
+  }
+
+  /* Valeur à renseigner — visible pour la relecture */
+  .todo {
+    @apply rounded-[0.3rem] bg-sage-soft px-1 text-sage-deep;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* Champs de formulaire */
+  .field {
+    @apply block w-full rounded-control border border-line bg-surface px-4 py-3 text-body text-ink shadow-[inset_0_1px_2px_rgb(var(--ink)/0.03)] transition-[border-color,box-shadow] duration-200 placeholder:text-muted/70 hover:border-muted/50 focus:border-petrol focus:outline-none focus:ring-4 focus:ring-petrol/15;
+  }
+  .field[aria-invalid="true"] {
+    @apply border-danger focus:ring-danger/15;
+  }
+}
+
+/* ==========================================================================
+   Mouvement — discret, et désactivé si l'utilisateur le demande.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    animation: enter 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  .arc-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: arc-draw 400ms cubic-bezier(0.22, 1, 0.36, 1) 200ms forwards;
+  }
+
+  .arc-ticks {
+    opacity: 0;
+    animation: fade 300ms ease-out 450ms forwards;
+  }
+
+  /* Apparition au défilement, sans JavaScript (navigateurs compatibles) */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: enter linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes arc-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
