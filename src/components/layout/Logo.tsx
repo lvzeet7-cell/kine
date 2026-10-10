@@ -38,12 +38,12 @@ export function Logo({ className, tone = "dark" }: { className?: string; tone?: 
         <span
           className={cn(
             "truncate text-[1.0625rem] font-semibold tracking-[-0.015em]",
-            tone === "dark" ? "text-ink" : "text-white",
+            "text-white",
           )}
         >
           {name}
         </span>
-        <span className={cn("mt-1 text-micro", tone === "dark" ? "text-muted" : "text-white/70")}>
+        <span className="mt-1 text-micro text-white/70">
           Kinésithérapie
         </span>
       </span>

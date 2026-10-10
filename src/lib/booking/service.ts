@@ -131,7 +131,7 @@ export async function createBooking(repo: BookingRepository, input: BookingInput
   const service = await resolveService(repo, typeof input.serviceId === "string" ? input.serviceId : "");
   if (!service) return fail("invalid_service", "Ce type de rendez-vous n'existe pas.");
 
-  const patient = normalizePatient(input);
+  const patient = normalizePatient(input as Record<string, unknown>);
   const errors = validatePatient(patient);
   if (Object.keys(errors).length) return fail("invalid", "Certains champs sont à corriger.", errors);
 
