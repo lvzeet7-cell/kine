@@ -8,7 +8,7 @@ out
 .DS_Store
 
 # Base de données locale
-data/
+/data/
 
 # Vercel
 .vercel
