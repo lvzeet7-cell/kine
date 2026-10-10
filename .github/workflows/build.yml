@@ -12,12 +12,18 @@ jobs:
         with:
           node-version: 22
       - run: npm install --no-audit --no-fund
+      - name: Types
+        shell: bash
+        run: |
+          if ! npx tsc --noEmit --pretty false > tsc.log 2>&1; then
+            head -n 60 tsc.log | sed 's/%/%25/g' | awk 'BEGIN{ORS="%0A"} {print}' > summary.txt
+            echo "::error title=Types::$(cat summary.txt)"
+            exit 1
+          fi
       - name: Build
         shell: bash
         run: |
-          set -o pipefail
           if ! npm run build > build.log 2>&1; then
-            # Résumé de l'erreur visible dans les annotations du job
             tail -n 80 build.log | sed 's/%/%25/g' | awk 'BEGIN{ORS="%0A"} {print}' > summary.txt
             echo "::error title=Build::$(cat summary.txt)"
             exit 1

@@ -68,7 +68,7 @@ function SettingsPanel() {
     setSaving(false);
     if (r.ok) setMsg({ tone: "ok", text: "Réglages enregistrés." });
     else {
-      setErrors(r.data.errors ?? {});
+      setErrors((r.data.errors as Record<string, string> | undefined) ?? {});
       setMsg({ tone: "error", text: String(r.data.message ?? "Les réglages n'ont pas été enregistrés.") });
     }
   }
@@ -181,7 +181,7 @@ export function TeleconsultationsAdmin({ services }: { services: BookingService[
     setFlash(null);
     const r = await adminApi<{ message?: string }>(`/api/admin/teleconsultations/${a.id}/send-link`, { method: "POST", body: "{}" });
     setBusy(null);
-    setFlash({ tone: r.ok ? "ok" : "error", text: String(r.data.message ?? (r.ok ? "Lien envoyé." : "Échec de l'envoi.")) });
+    setFlash({ tone: r.ok ? "ok" : "error", text: String((r.data as { message?: unknown }).message ?? (r.ok ? "Lien envoyé." : "Échec de l'envoi.")) });
   }
 
   return (
