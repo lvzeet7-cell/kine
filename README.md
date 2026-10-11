@@ -150,6 +150,23 @@ Les messages sont envoyés à `ADMIN_EMAIL` via le même fournisseur d'e-mails.
 Champ piège, délai minimal de saisie, limitation par adresse IP, contrôle d'origine (CSRF), et Cloudflare
 Turnstile en option (`NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY`).
 
+### Sécurité
+
+- **Espace admin** : mot de passe (12 caractères min.), session signée de 8 h dans un cookie `HttpOnly` / `SameSite=Strict`.
+  Changer `ADMIN_PASSWORD` ou `SESSION_SECRET` déconnecte toutes les sessions. Vérification à trois niveaux :
+  `src/middleware.ts` (toutes les requêtes /admin), chaque page admin (`requireAdmin`), chaque API (`adminRoute`).
+- **Limitation des tentatives enregistrée en base** (`src/lib/rate-limit.ts`) : connexion admin (8 essais / 15 min par
+  adresse, 100 / h au total), réservations, demandes de lien, formulaire de contact. Les adresses IP et e-mails ne sont
+  pas stockés en clair (empreinte HMAC), et sont purgés au bout de 48 h. Sans base (Turso non configuré sur Vercel),
+  un compteur en mémoire prend le relais, moins efficace.
+- **En-têtes HTTP** (`next.config.ts`) : politique de sécurité du contenu (CSP), HSTS, `X-Frame-Options: DENY`,
+  `nosniff`, `Referrer-Policy`, caméra/micro limités au site.
+- **Contrôle d'origine** (CSRF) sur toutes les requêtes qui modifient des données ; validation de toutes les entrées
+  côté serveur ; requêtes SQL paramétrées ; liens patients à jeton aléatoire de 256 bits (seule l'empreinte est stockée).
+- **Vérification automatique** à chaque envoi sur GitHub (`.github/workflows/build.yml`) : types, compilation, tests
+  (`npm run test:tele`, `npm run test:security`), audit des dépendances (`npm audit`, bloquant à partir de « high »),
+  puis tests de bout en bout sur le site compilé (`tests/smoke.e2e.mjs` : en-têtes, protection admin, CSP).
+
 ### Téléconsultation
 
 Rendez-vous en vidéo avec le kinésithérapeute (page publique `/teleconsultation`, salle patient
