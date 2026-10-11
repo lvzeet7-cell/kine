@@ -76,6 +76,12 @@ export interface BookingRepository {
   getSetting(key: string): Promise<string | null>;
   setSetting(key: string, value: string): Promise<void>;
 
+  /* Limitation des tentatives (stockée en base : partagée entre toutes les instances du serveur) */
+  /** Enregistre un passage dans `bucket` et renvoie le nombre de passages depuis `since` (ms), celui-ci compris */
+  recordHit(bucket: string, now: number, since: number): Promise<number>;
+  /** Supprime les passages antérieurs à `before` (ms) */
+  purgeHits(before: number): Promise<number>;
+
   addNotification(type: NotificationType, appointmentId: string | null, message: string): Promise<void>;
   listNotifications(limit?: number): Promise<AdminNotification[]>;
   markNotificationsRead(ids?: string[]): Promise<void>;

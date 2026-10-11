@@ -231,7 +231,8 @@ export function TeleRoom({ joinEndpoint, joinBody, role, remoteLabel, waitingTex
       return;
     }
 
-    const call = factory.createCallObject({ subscribeToTracksAutomatically: true });
+    // avoidEval : compatible avec la politique de sécurité du site (pas de 'unsafe-eval')
+    const call = factory.createCallObject({ subscribeToTracksAutomatically: true, dailyConfig: { avoidEval: true } });
     callRef.current = call;
 
     const refresh = () => {

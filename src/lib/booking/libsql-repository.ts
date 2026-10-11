@@ -98,6 +98,8 @@ const SCHEMA_V1 = [
     updated_at TEXT NOT NULL
   )`,
   `CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS rate_hits (bucket TEXT NOT NULL, at INTEGER NOT NULL)`,
+  `CREATE INDEX IF NOT EXISTS rate_hits_bucket_at ON rate_hits(bucket, at)`,
 ];
 
 const ACTIVE = `status IN ('PENDING','CONFIRMED')`;
@@ -336,6 +338,18 @@ export class LibsqlRepository implements BookingRepository {
       "INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
       [key, value],
     );
+  }
+
+  async recordHit(bucket: string, now: number, since: number) {
+    await this.db.execute("DELETE FROM rate_hits WHERE bucket = ? AND at < ?", [bucket, since]);
+    await this.db.execute("INSERT INTO rate_hits (bucket, at) VALUES (?, ?)", [bucket, now]);
+    const { rows } = await this.db.execute("SELECT COUNT(*) AS n FROM rate_hits WHERE bucket = ? AND at >= ?", [bucket, since]);
+    return Number(rows[0]?.n ?? 0);
+  }
+
+  async purgeHits(before: number) {
+    const r = await this.db.execute("DELETE FROM rate_hits WHERE at < ?", [before]);
+    return r.rowsAffected;
   }
 
   async listAvailability(): Promise<AvailabilityRule[]> {

@@ -23,7 +23,9 @@ export function LoginForm({ configured }: { configured: boolean }) {
     setBusy(false);
     if (r.ok) {
       const next = new URLSearchParams(window.location.search).get("suite");
-      window.location.href = next && next.startsWith("/admin") && !next.startsWith("//") ? next : "/admin";
+      // Redirection interne uniquement (pas de lien vers un autre site)
+      const safeNext = next && /^\/admin(\/[A-Za-z0-9/_-]*)?$/.test(next) ? next : "/admin";
+      window.location.href = safeNext;
       return;
     }
     setError(String(r.data.message));

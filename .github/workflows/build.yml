@@ -3,6 +3,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+env:
+  NEXT_PUBLIC_SITE_URL: http://localhost:3000
+  ADMIN_PASSWORD: mot-de-passe-de-test-ci-tres-long
+  SESSION_SECRET: secret-de-session-de-test-ci-0123456789abcdef
+  CRON_SECRET: cron-secret-de-test-ci-0123456789
+  DATABASE_PATH: /tmp/ci-cabinet.db
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,6 +26,13 @@ jobs:
             echo "::error title=Types::$(cat summary.txt)"
             exit 1
           fi
+      - name: Lint
+        shell: bash
+        run: |
+          if ! npx eslint . > lint.log 2>&1; then
+            head -n 60 lint.log | sed 's/%/%25/g' | awk 'BEGIN{ORS="%0A"} {print}' > summary.txt
+            echo "::warning title=Lint::$(cat summary.txt)"
+          fi
       - name: Build
         shell: bash
         run: |
@@ -28,5 +41,35 @@ jobs:
             echo "::error title=Build::$(cat summary.txt)"
             exit 1
           fi
-          tail -n 40 build.log
-      - run: npm run test:tele
+      - name: Tests téléconsultation et sécurité
+        shell: bash
+        run: |
+          set -o pipefail
+          for t in test:tele test:security; do
+            if ! npm run $t > t.log 2>&1; then
+              tail -n 40 t.log | sed 's/%/%25/g' | awk 'BEGIN{ORS="%0A"} {print}' > summary.txt
+              echo "::error title=$t::$(cat summary.txt)"
+              exit 1
+            fi
+            echo "::notice title=$t::$(tail -n 1 t.log)"
+          done
+      - name: Dépendances (npm audit)
+        shell: bash
+        run: |
+          npm audit --omit=dev > audit.log 2>&1 || true
+          tail -n 40 audit.log | sed 's/%/%25/g' | awk 'BEGIN{ORS="%0A"} {print}' > summary.txt
+          echo "::notice title=Audit::$(cat summary.txt)"
+          npm audit --omit=dev --audit-level=high
+      - name: Vérifications de bout en bout (site compilé)
+        shell: bash
+        run: |
+          npm install --no-save playwright@1 > /dev/null 2>&1
+          npx playwright install --with-deps chromium > /dev/null 2>&1
+          (npm start > server.log 2>&1 &)
+          for i in $(seq 1 30); do curl -s -o /dev/null http://localhost:3000/ && break; sleep 1; done
+          if ! BASE=http://localhost:3000 node tests/smoke.e2e.mjs > smoke.log 2>&1; then
+            cat smoke.log server.log | tail -n 80 | sed 's/%/%25/g' | awk 'BEGIN{ORS="%0A"} {print}' > summary.txt
+            echo "::error title=Smoke::$(cat summary.txt)"
+            exit 1
+          fi
+          echo "::notice title=Smoke::$(cat smoke.log | sed 's/%/%25/g' | awk 'BEGIN{ORS="%0A"} {print}')"

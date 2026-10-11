@@ -113,6 +113,14 @@ const MIGRATIONS: string[] = [
     value TEXT NOT NULL
   );
   `,
+  // v3 — limitation des tentatives (connexion admin, réservations, formulaires) ; clés anonymisées (empreintes)
+  `
+  CREATE TABLE rate_hits (
+    bucket TEXT NOT NULL,
+    at INTEGER NOT NULL
+  );
+  CREATE INDEX rate_hits_bucket_at ON rate_hits(bucket, at);
+  `,
 ];
 
 function toAppointment(r: Record<string, unknown>): Appointment {
@@ -387,6 +395,19 @@ export class SqliteRepository implements BookingRepository {
     this.db
       .prepare("INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value")
       .run(key, value);
+  }
+
+  async recordHit(bucket: string, now: number, since: number) {
+    return this.tx(() => {
+      this.db.prepare("DELETE FROM rate_hits WHERE bucket = ? AND at < ?").run(bucket, since);
+      this.db.prepare("INSERT INTO rate_hits (bucket, at) VALUES (?, ?)").run(bucket, now);
+      const r = this.db.prepare("SELECT COUNT(*) AS n FROM rate_hits WHERE bucket = ? AND at >= ?").get(bucket, since) as Row;
+      return Number(r.n);
+    });
+  }
+
+  async purgeHits(before: number) {
+    return Number(this.db.prepare("DELETE FROM rate_hits WHERE at < ?").run(before).changes);
   }
 
   async listAvailability(): Promise<AvailabilityRule[]> {

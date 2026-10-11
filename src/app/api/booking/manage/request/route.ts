@@ -3,7 +3,8 @@ import { reissueManageLinks } from "@/lib/booking/service";
 import { EMAIL_RE } from "@/lib/booking/validation";
 import { patientManageLinks } from "@/lib/email/templates";
 import { sendEmail } from "@/lib/email/send";
-import { clientIp, json, rateLimited, readJson, safe, sameOrigin } from "@/lib/http";
+import { clientIp, json, readJson, safe, sameOrigin } from "@/lib/http";
+import { tooManyAttempts } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
   return safe(async () => {
     if (!sameOrigin(request)) return json({ message: "Requête refusée." }, 403);
     const ip = clientIp(request);
-    if (rateLimited(`manage-link:${ip}`, 5, 15 * 60_000)) {
+    if (await tooManyAttempts("manage-link-ip", ip, 5, 15 * 60_000)) {
       return json({ message: "Trop de demandes depuis votre connexion. Réessayez plus tard ou appelez le cabinet." }, 429);
     }
     const body = await readJson(request);
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
       return json(DONE);
     }
     // Au plus 3 envois par heure vers une même adresse
-    if (rateLimited(`manage-link-to:${email}`, 3, 60 * 60_000)) return json(DONE);
+    if (await tooManyAttempts("manage-link-to", email, 3, 60 * 60_000)) return json(DONE);
 
     const items = await reissueManageLinks(await getRepo(), email);
     if (items.length > 0) await sendEmail(patientManageLinks(items));

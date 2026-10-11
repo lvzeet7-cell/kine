@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test:tele": "tsx tests/teleconsultation.test.ts"
+    "test:tele": "tsx tests/teleconsultation.test.ts",
+    "test:security": "tsx tests/security.test.ts"
   },
   "dependencies": {
     "@daily-co/daily-js": "^0.93.0",

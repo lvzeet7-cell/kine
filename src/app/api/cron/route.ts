@@ -3,7 +3,8 @@ import { getRepo } from "@/lib/booking/server";
 import { dueReminders, purgeExpired } from "@/lib/booking/service";
 import { patientReminder } from "@/lib/email/templates";
 import { emailConfigured, sendEmail } from "@/lib/email/send";
-import { json, safe } from "@/lib/http";
+import { json, safe, safeEqual } from "@/lib/http";
+import { purgeAttempts } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +17,7 @@ async function run(request: Request) {
   return safe(async () => {
     const secret = process.env.CRON_SECRET;
     if (!secret || secret.length < 16) return json({ message: "CRON_SECRET non configuré." }, 503);
-    if (request.headers.get("authorization") !== `Bearer ${secret}`) return json({ message: "Non autorisé." }, 401);
+    if (!safeEqual(request.headers.get("authorization") ?? "", `Bearer ${secret}`)) return json({ message: "Non autorisé." }, 401);
 
     const repo = await getRepo();
     let reminders = 0;
@@ -30,6 +31,7 @@ async function run(request: Request) {
       }
     }
     const purged = await purgeExpired(repo);
+    await purgeAttempts();
     return json({ reminders, purged });
   });
 }

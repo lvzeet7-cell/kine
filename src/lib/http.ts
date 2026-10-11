@@ -17,12 +17,27 @@ export function rateLimited(key: string, max: number, windowMs: number): boolean
   return recent.length > max;
 }
 
+/**
+ * Adresse IP du visiteur. Sur Vercel, `x-vercel-forwarded-for` / `x-real-ip` sont fixés par la plateforme
+ * (un visiteur ne peut pas les falsifier). Derrière un autre hébergeur, le proxy doit remplir `x-real-ip`.
+ */
 export function clientIp(request: Request): string {
   return (
+    request.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip")?.trim() ||
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
     "unknown"
   );
+}
+
+/** Comparaison de deux chaînes à durée constante (secrets) */
+export function safeEqual(a: string, b: string): boolean {
+  const enc = new TextEncoder();
+  const x = enc.encode(a);
+  const y = enc.encode(b);
+  let diff = x.length ^ y.length;
+  for (let i = 0; i < Math.max(x.length, y.length); i++) diff |= (x[i] ?? 0) ^ (y[i] ?? 0);
+  return diff === 0;
 }
 
 /**

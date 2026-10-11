@@ -1,3 +1,4 @@
+import { requireAdmin } from "@/lib/admin-guard";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SITE } from "@/data/site";
@@ -19,6 +20,7 @@ const TZ = bookingConfig.timezone;
 
 /** Salle côté praticien (la session admin est vérifiée par le layout ET par l'API d'accès) */
 export default async function AdminTeleRoomPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdmin();
   const { id } = await params;
   const repo = await getRepo();
   const a = await repo.getAppointment(id);

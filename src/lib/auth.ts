@@ -2,11 +2,11 @@
  * Authentification de l'espace admin.
  * - Mot de passe unique défini dans ADMIN_PASSWORD (12 caractères minimum)
  * - Session signée HMAC-SHA256 (SESSION_SECRET), cookie HttpOnly, SameSite=Strict,
- *   Secure en production, durée 12 h.
+ *   Secure en production, durée 8 h. Changer ADMIN_PASSWORD ou SESSION_SECRET déconnecte toutes les sessions.
  */
 
 export const SESSION_COOKIE = "cabinet_admin";
-const SESSION_HOURS = 12;
+const SESSION_HOURS = 8;
 
 const enc = new TextEncoder();
 
@@ -23,7 +23,8 @@ export function adminConfigured(): boolean {
 async function hmac(data: string): Promise<string> {
   const key = await crypto.subtle.importKey(
     "raw",
-    enc.encode(process.env.SESSION_SECRET ?? ""),
+    // La clé dépend aussi du mot de passe : le changer déconnecte toutes les sessions ouvertes
+    enc.encode(`${process.env.SESSION_SECRET ?? ""}\u0000${process.env.ADMIN_PASSWORD ?? ""}`),
     { name: "HMAC", hash: "SHA-256" },
     false,
     ["sign"],

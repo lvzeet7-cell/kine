@@ -1,3 +1,4 @@
+import { requireAdmin } from "@/lib/admin-guard";
 import { bookingConfig, reminderHoursBefore } from "@/lib/booking/config";
 import { emailConfigured } from "@/lib/email/send";
 import { AdminPageHeader } from "@/components/admin/shared";
@@ -18,7 +19,8 @@ function Row({ label, value, ok }: { label: string; value: string; ok?: boolean 
   );
 }
 
-export default function ParametresPage() {
+export default async function ParametresPage() {
+  await requireAdmin();
   const c = bookingConfig;
   const provider = process.env.EMAIL_PROVIDER ?? "";
   return (

@@ -147,6 +147,18 @@ export class MemoryRepository implements BookingRepository {
     this.settings[key] = value;
   }
 
+  hits: { bucket: string; at: number }[] = [];
+  async recordHit(bucket: string, now: number, since: number) {
+    this.hits = this.hits.filter((h) => !(h.bucket === bucket && h.at < since));
+    this.hits.push({ bucket, at: now });
+    return this.hits.filter((h) => h.bucket === bucket && h.at >= since).length;
+  }
+  async purgeHits(before: number) {
+    const n = this.hits.length;
+    this.hits = this.hits.filter((h) => h.at >= before);
+    return n - this.hits.length;
+  }
+
   async addNotification(type: NotificationType, appointmentId: string | null, message: string) {
     this.notifications.unshift({ id: randomId(), type, appointmentId, message, createdAt: nowIso(), readAt: null });
   }

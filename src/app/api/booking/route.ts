@@ -4,7 +4,8 @@ import { cabinetNotification, patientConfirmation } from "@/lib/email/templates"
 import { sendEmail } from "@/lib/email/send";
 import { prepareTeleconsultation } from "@/lib/teleconsultation/service";
 import { getVideoProvider } from "@/lib/video";
-import { clientIp, json, rateLimited, readJson, safe, sameOrigin, verifyTurnstile } from "@/lib/http";
+import { clientIp, json, readJson, safe, sameOrigin, verifyTurnstile } from "@/lib/http";
+import { tooManyAttempts } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
   return safe(async () => {
     if (!sameOrigin(request)) return json({ message: "Requête refusée." }, 403);
     const ip = clientIp(request);
-    if (rateLimited(`book:${ip}`, 5, 15 * 60_000)) {
+    if (await tooManyAttempts("book", ip, 5, 15 * 60_000)) {
       return json({ message: "Trop de réservations depuis votre connexion. Réessayez plus tard ou appelez le cabinet." }, 429);
     }
     const body = await readJson(request);
