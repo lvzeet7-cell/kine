@@ -7,8 +7,8 @@ export const mainNav: NavItem[] = [
   { label: "Soins conventionnés", href: "/soins" },
   { label: "Soins non conventionnés", href: "/soins-non-conventionnes" },
   { label: "Mon bilan prévention", href: "/mon-bilan-prevention" },
+  { label: "Téléconsultation", href: "/teleconsultation" },
   { label: "Déroulement", href: "/deroulement" },
-  { label: "Téléconsultation", href: "/teleconsultation", inHeader: false },
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
 ];

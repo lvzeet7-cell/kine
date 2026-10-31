@@ -64,6 +64,26 @@ if (await mapBtn.count()) {
 }
 ok(violations.length === 0, `aucune violation de CSP ni erreur JavaScript${violations.length ? " : " + violations.slice(0, 3).join(" | ") : ""}`);
 
+// Menu principal : tous les liens tiennent sur une ligne, sans débordement, aux largeurs d'ordinateur
+for (const width of [1280, 1440, 1920]) {
+  await page.setViewportSize({ width, height: 900 });
+  await page.goto(BASE + "/", { waitUntil: "networkidle" });
+  const nav = await page.evaluate(() => {
+    const ul = document.querySelector('nav[aria-label="Navigation principale"] ul');
+    if (!ul) return null;
+    const links = [...ul.querySelectorAll("a")];
+    return {
+      overflow: ul.scrollWidth > ul.clientWidth + 1,
+      wrapped: links.some((a) => a.getBoundingClientRect().height > 60),
+      tele: links.some((a) => a.getAttribute("href") === "/teleconsultation"),
+      pageOverflow: document.documentElement.scrollWidth > window.innerWidth,
+    };
+  });
+  ok(nav && !nav.overflow && !nav.wrapped && !nav.pageOverflow, `menu à ${width}px : sur une ligne, sans débordement`);
+  ok(nav?.tele, `menu à ${width}px : lien Téléconsultation présent`);
+}
+await page.setViewportSize({ width: 1280, height: 900 });
+
 await page.goto(BASE + "/admin/connexion", { waitUntil: "networkidle" });
 await page.fill("#admin-password", process.env.ADMIN_PASSWORD);
 await page.getByRole("button", { name: "Se connecter" }).click();

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Icon } from "@/components/ui/Icon";
 import { SITE, isSet } from "@/data/site";
 import { services } from "@/data/services";
 import { faq } from "@/data/faq";
@@ -56,6 +57,20 @@ export default async function HomePage() {
             </div>
             <Link href="/soins-non-conventionnes" className="link shrink-0">
               Découvrir les soins non conventionnés
+            </Link>
+          </div>
+          <div className="mt-4 flex flex-col gap-4 rounded-card border border-line bg-petrol-soft/50 p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex gap-4">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-petrol text-white">
+                <Icon name="video" size={20} />
+              </span>
+              <div>
+                <h3 className="text-h3">Téléconsultation</h3>
+                <p className="mt-1 text-small text-muted">Un rendez-vous en vidéo depuis chez vous, pour les patients déjà suivis au cabinet.</p>
+              </div>
+            </div>
+            <Link href="/teleconsultation" className="link shrink-0">
+              Découvrir la téléconsultation
             </Link>
           </div>
         </div>
