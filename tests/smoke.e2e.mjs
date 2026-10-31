@@ -77,9 +77,10 @@ for (const width of [1280, 1440, 1920]) {
       wrapped: links.some((a) => a.getBoundingClientRect().height > 60),
       tele: links.some((a) => a.getAttribute("href") === "/teleconsultation"),
       pageOverflow: document.documentElement.scrollWidth > window.innerWidth,
+      sw: ul.scrollWidth, cw: ul.clientWidth, docW: document.documentElement.scrollWidth, maxH: Math.max(...links.map((a) => a.getBoundingClientRect().height)),
     };
   });
-  ok(nav && !nav.overflow && !nav.wrapped && !nav.pageOverflow, `menu à ${width}px : sur une ligne, sans débordement`);
+  ok(nav && !nav.overflow && !nav.wrapped && !nav.pageOverflow, `menu à ${width}px : sur une ligne, sans débordement ${JSON.stringify(nav)}`);
   ok(nav?.tele, `menu à ${width}px : lien Téléconsultation présent`);
 }
 await page.setViewportSize({ width: 1280, height: 900 });
