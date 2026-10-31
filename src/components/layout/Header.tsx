@@ -111,7 +111,7 @@ export function Header() {
                   href={item.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "relative block whitespace-nowrap px-2 py-3 text-[0.875rem] font-medium transition-colors duration-200 2xl:text-[0.9375rem]",
+                    "relative block whitespace-nowrap px-2 py-3 text-[0.875rem] font-medium transition-colors duration-200",
                     active ? "text-petrol" : "text-ink/75 hover:text-ink",
                   )}
                 >
