@@ -32,7 +32,9 @@ const nextConfig: NextConfig = {
   // Le lint se lance à part (npm run lint) : il ne bloque pas la mise en ligne
   eslint: { ignoreDuringBuilds: true },
   images: {
-    formats: ["image/avif", "image/webp"],
+    // WebP uniquement : aussi net à qualité égale, et bien plus rapide à produire que l'AVIF
+    // pour de grandes photos (évite un premier affichage lent des images)
+    formats: ["image/webp"],
     // Qualité élevée pour les photos (90 au lieu de 75 par défaut)
     qualities: [90],
   },

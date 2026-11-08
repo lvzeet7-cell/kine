@@ -67,7 +67,7 @@ ok(violations.length === 0, `aucune violation de CSP ni erreur JavaScript${viola
 // Menu principal : tous les liens tiennent sur une ligne, sans débordement, aux largeurs d'ordinateur
 for (const width of [1280, 1440, 1920]) {
   await page.setViewportSize({ width, height: 900 });
-  await page.goto(BASE + "/", { waitUntil: "load", timeout: 90000 });
+  await page.goto(BASE + "/", { waitUntil: "domcontentloaded", timeout: 90000 });
   const nav = await page.evaluate(() => {
     const ul = document.querySelector('nav[aria-label="Navigation principale"] ul');
     if (!ul) return null;
