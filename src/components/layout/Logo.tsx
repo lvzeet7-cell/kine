@@ -14,9 +14,9 @@ export function Logo({ className, tone = "dark" }: { className?: string; tone?: 
   if (tone === "dark") {
     return (
       <Link href="/" className={cn("group flex min-w-0 items-center gap-3", className)} aria-label="Leopold PIRARD, masseur-kinésithérapeute — accueil">
-        <Image quality={90} src="/images/logo-embleme.png" alt="" width={102} height={110} priority className="h-11 w-auto shrink-0" />
+        <Image quality={90} src="/images/logo-embleme-clair.png" alt="" width={102} height={110} priority className="h-11 w-auto shrink-0" />
         <Image quality={90}
-          src="/images/logo-texte.png"
+          src="/images/logo-texte-clair.png"
           alt=""
           width={213}
           height={38}

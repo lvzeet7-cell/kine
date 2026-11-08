@@ -66,9 +66,9 @@ const config: Config = {
         media: "1.75rem",
       },
       boxShadow: {
-        soft: "0 1px 2px rgb(var(--ink) / 0.04), 0 8px 24px -12px rgb(var(--ink) / 0.12)",
-        lift: "0 2px 4px rgb(var(--ink) / 0.05), 0 20px 40px -20px rgb(var(--petrol-deep) / 0.28)",
-        header: "0 1px 0 rgb(var(--line) / 1), 0 6px 20px -14px rgb(var(--ink) / 0.18)",
+        soft: "0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.5)",
+        lift: "0 2px 4px rgb(0 0 0 / 0.35), 0 20px 40px -20px rgb(0 0 0 / 0.6)",
+        header: "0 1px 0 rgb(var(--line) / 1), 0 6px 20px -14px rgb(0 0 0 / 0.6)",
       },
       spacing: {
         section: "clamp(4.5rem, 3rem + 6vw, 8rem)",

@@ -1,0 +1,37 @@
+name: Captures d'écran
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+env:
+  NEXT_PUBLIC_SITE_URL: http://localhost:3000
+  ADMIN_PASSWORD: mot-de-passe-de-test-ci-tres-long
+  SESSION_SECRET: secret-de-session-de-test-ci-0123456789abcdef
+  CRON_SECRET: cron-secret-de-test-ci-0123456789
+  DATABASE_PATH: /tmp/ci-cabinet.db
+jobs:
+  captures:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - name: Captures
+        run: |
+          npm install --no-save playwright@1 > /dev/null 2>&1
+          npx playwright install --with-deps chromium > /dev/null 2>&1
+          (npm start > server.log 2>&1 &)
+          for i in $(seq 1 30); do curl -s -o /dev/null http://localhost:3000/ && break; sleep 1; done
+          OUT=/tmp/captures node tests/screenshots.mjs
+      - name: Publier sur la branche « captures »
+        run: |
+          cd /tmp/captures
+          git init -q && git checkout -q -b captures
+          git config user.name "CI" && git config user.email "ci@example.invalid"
+          git add -A && git commit -qm "Captures ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" captures

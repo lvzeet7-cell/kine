@@ -84,7 +84,7 @@ function ControlButton({ on, onClick, labelOn, labelOff, iconOn, iconOff, danger
       title={label}
       className={cn(
         "flex h-14 w-14 items-center justify-center rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:w-12",
-        danger ? "bg-danger text-white hover:brightness-110" : on ? "bg-white/15 text-white hover:bg-white/25" : "bg-white text-petrol-deep",
+        danger ? "bg-danger text-white hover:brightness-110" : on ? "bg-white/15 text-white hover:bg-white/25" : "bg-white text-[#0C353F]",
       )}
     >
       <Icon name={on ? iconOn : iconOff} size={22} />
