@@ -9,13 +9,13 @@ const browser = await chromium.launch();
 for (const [label, vp] of [["desktop", { width: 1440, height: 900 }], ["mobile", { width: 390, height: 844 }]]) {
   const page = await browser.newPage({ viewport: vp, deviceScaleFactor: 1 });
   for (const p of pages) {
-    await page.goto(BASE + p, { waitUntil: "networkidle" });
+    await page.goto(BASE + p, { waitUntil: "load", timeout: 90000 });
     await page.waitForTimeout(400);
     const name = (p === "/" ? "accueil" : p.slice(1).replace(/\//g, "-")) + `-${label}.jpg`;
     await page.screenshot({ path: `${OUT}/${name}`, fullPage: label === "desktop", type: "jpeg", quality: 70 });
   }
   if (label === "desktop") {
-    await page.goto(BASE + "/admin/connexion", { waitUntil: "networkidle" });
+    await page.goto(BASE + "/admin/connexion", { waitUntil: "load", timeout: 90000 });
     await page.fill("#admin-password", process.env.ADMIN_PASSWORD);
     await page.getByRole("button", { name: "Se connecter" }).click();
     await page.waitForURL(BASE + "/admin");

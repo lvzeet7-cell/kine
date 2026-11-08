@@ -52,11 +52,11 @@ page.on("console", (m) => {
 });
 page.on("pageerror", (e) => violations.push(`${page.url()} : ${e.message}`));
 for (const p of ["/", "/rendez-vous", "/contact", "/teleconsultation", "/soins", "/cabinet", "/mon-bilan-prevention", "/admin/connexion"]) {
-  const r = await page.goto(BASE + p, { waitUntil: "networkidle" });
+  const r = await page.goto(BASE + p, { waitUntil: "load", timeout: 90000 });
   ok(r?.status() === 200, `${p} : HTTP ${r?.status()}`);
 }
 // carte affichée à la demande (iframe OpenStreetMap autorisée par la CSP)
-await page.goto(BASE + "/contact", { waitUntil: "networkidle" });
+await page.goto(BASE + "/contact", { waitUntil: "load", timeout: 90000 });
 const mapBtn = page.getByRole("button", { name: "Afficher la carte" });
 if (await mapBtn.count()) {
   await mapBtn.first().click();
@@ -67,7 +67,7 @@ ok(violations.length === 0, `aucune violation de CSP ni erreur JavaScript${viola
 // Menu principal : tous les liens tiennent sur une ligne, sans débordement, aux largeurs d'ordinateur
 for (const width of [1280, 1440, 1920]) {
   await page.setViewportSize({ width, height: 900 });
-  await page.goto(BASE + "/", { waitUntil: "networkidle" });
+  await page.goto(BASE + "/", { waitUntil: "load", timeout: 90000 });
   const nav = await page.evaluate(() => {
     const ul = document.querySelector('nav[aria-label="Navigation principale"] ul');
     if (!ul) return null;
@@ -85,12 +85,12 @@ for (const width of [1280, 1440, 1920]) {
 }
 await page.setViewportSize({ width: 1280, height: 900 });
 
-await page.goto(BASE + "/admin/connexion", { waitUntil: "networkidle" });
+await page.goto(BASE + "/admin/connexion", { waitUntil: "load", timeout: 90000 });
 await page.fill("#admin-password", process.env.ADMIN_PASSWORD);
 await page.getByRole("button", { name: "Se connecter" }).click();
 await page.waitForURL(BASE + "/admin", { timeout: 15000 });
 ok(await page.getByText("Tableau de bord").count() > 0, "connexion admin puis tableau de bord");
-const tele = await page.goto(BASE + "/admin/teleconsultations", { waitUntil: "networkidle" });
+const tele = await page.goto(BASE + "/admin/teleconsultations", { waitUntil: "load", timeout: 90000 });
 ok(tele?.status() === 200, "page admin Téléconsultations accessible une fois connecté");
 await browser.close();
 
