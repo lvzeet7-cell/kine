@@ -25,11 +25,10 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <svg width="64" height="64" viewBox="0 0 36 36">
-            <rect width="36" height="36" rx="10" fill="#124B57" />
-            <path d="M27 27A18 18 0 0 0 9 9" fill="none" stroke="#9DB3A5" strokeWidth="2" strokeLinecap="round" />
-            <path d="M9 27 L20.5 15.5M9 27H24" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" />
-            <circle cx="9" cy="27" r="2.6" fill="#fff" />
+          <svg width="64" height="64" viewBox="15 7 57 57">
+            <path fill="#ECF0EE" d="M22 9h5v33h20v5H40v15h-4V47H22z" />
+            <path fill="none" stroke="#6FA6D6" strokeWidth="4.3" d="M35 23H50.2a10.4 10.4 0 0 1 0 20.8H49.5" />
+            <path fill="#6FA6D6" d="M40 30v7.2h-4v-3.6c0-2 1.6-3.4 4-3.6z" />
           </svg>
           <div style={{ fontSize: 28, color: "#C9D6CE" }}>Kinésithérapie</div>
         </div>

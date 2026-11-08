@@ -51,16 +51,18 @@ export function Logo({ className, tone = "dark" }: { className?: string; tone?: 
   );
 }
 
-/** Pictogramme : arc d'amplitude articulaire gradué */
-export function LogoMark({ tone = "dark", size = 36 }: { tone?: "dark" | "light"; size?: number }) {
-  const bg = tone === "dark" ? "rgb(var(--petrol))" : "rgb(255 255 255 / 0.12)";
+/**
+ * Monogramme « LP » du cabinet (dessiné en vectoriel d'après le logo fourni, sans fond).
+ * Couleurs claires : le site est en thème sombre.
+ */
+export const LP_COLORS = { l: "#ECF0EE", p: "#6FA6D6" };
+
+export function LogoMark({ size = 36 }: { tone?: "dark" | "light"; size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 36 36" aria-hidden="true" className="shrink-0">
-      <rect width="36" height="36" rx="10" fill={bg} />
-      <path d="M27 27A18 18 0 0 0 9 9" fill="none" stroke="rgb(var(--sage))" strokeWidth="1.6" strokeLinecap="round" />
-      <path d="M9 27 L20.5 15.5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M9 27H24" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
-      <circle cx="9" cy="27" r="2.2" fill="#fff" />
+    <svg width={size} height={size} viewBox="15 7 57 57" aria-hidden="true" className="shrink-0">
+      <path fill={LP_COLORS.l} d="M22 9h5v33h20v5H40v15h-4V47H22z" />
+      <path fill="none" stroke={LP_COLORS.p} strokeWidth="4.3" d="M35 23H50.2a10.4 10.4 0 0 1 0 20.8H49.5" />
+      <path fill={LP_COLORS.p} d="M40 30v7.2h-4v-3.6c0-2 1.6-3.4 4-3.6z" />
     </svg>
   );
 }
