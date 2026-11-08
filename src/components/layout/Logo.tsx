@@ -5,7 +5,7 @@ import { cn } from "@/lib/cn";
 
 /**
  * Logo.
- * - tone "dark" (header, fond clair) : logo officiel du cabinet, mis à l'horizontale
+ * - tone "dark" (header) : monogramme « LP » + nom du cabinet, à l'horizontale
  *   (emblème à gauche, nom à droite). Fichiers : /public/images/logo-embleme.png et logo-texte.png
  *   (logo complet sans fond : logo-leopold-pirard.png).
  * - tone "light" (footer, fond sombre) : version texte.
@@ -14,7 +14,7 @@ export function Logo({ className, tone = "dark" }: { className?: string; tone?: 
   if (tone === "dark") {
     return (
       <Link href="/" className={cn("group flex min-w-0 items-center gap-3", className)} aria-label="Leopold PIRARD, masseur-kinésithérapeute — accueil">
-        <Image quality={90} src="/images/logo-embleme-clair.png" alt="" width={102} height={110} priority className="h-11 w-auto shrink-0" />
+        <LogoMark size={44} />
         <Image quality={90}
           src="/images/logo-texte-clair.png"
           alt=""
