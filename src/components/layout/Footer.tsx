@@ -32,7 +32,7 @@ export function Footer({ openingDays }: { openingDays: OpeningDay[] }) {
     <footer className="on-dark bg-petrol-deep text-white/80">
       <div className="container-page py-10 lg:py-12">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-3">
             <Logo tone="light" />
             <address className="mt-5 space-y-1.5 text-small not-italic">
               <p>{isAddressSet() ? fullAddress() : `Adresse : ${fullAddress()}`}</p>
@@ -63,9 +63,9 @@ export function Footer({ openingDays }: { openingDays: OpeningDay[] }) {
             <BookingButton variant="light" size="md" className="mt-5" />
           </div>
 
-          <nav aria-label="Plan du site" className="lg:col-span-2">
+          <nav aria-label="Plan du site" className="lg:col-span-3">
             <h2 className="text-small font-semibold text-white">Navigation</h2>
-            <ul className="mt-3 space-y-1.5 text-small">
+            <ul className="mt-3 grid grid-cols-2 gap-x-5 gap-y-1.5 text-small">
               {mainNav.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="transition-colors hover:text-white">
