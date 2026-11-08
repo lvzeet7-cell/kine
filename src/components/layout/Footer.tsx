@@ -17,6 +17,7 @@ import {
 import { BookingButton } from "@/components/ui/BookingButton";
 import { OpeningHours } from "@/components/ui/OpeningHours";
 import { practitioner } from "@/data/practitioner";
+import { Icon } from "@/components/ui/Icon";
 import { Logo } from "./Logo";
 
 export function Footer({ openingDays }: { openingDays: OpeningDay[] }) {
@@ -29,11 +30,11 @@ export function Footer({ openingDays }: { openingDays: OpeningDay[] }) {
 
   return (
     <footer className="on-dark bg-petrol-deep text-white/80">
-      <div className="container-page py-16 lg:py-20">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-12 lg:gap-10">
+      <div className="container-page py-10 lg:py-12">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <Logo tone="light" />
-            <address className="mt-8 space-y-2 text-small not-italic">
+            <address className="mt-5 space-y-1.5 text-small not-italic">
               <p>{isAddressSet() ? fullAddress() : `Adresse : ${fullAddress()}`}</p>
               {directions && (
                 <p>
@@ -59,12 +60,12 @@ export function Footer({ openingDays }: { openingDays: OpeningDay[] }) {
                 </p>
               )}
             </address>
-            <BookingButton variant="light" size="md" className="mt-8" />
+            <BookingButton variant="light" size="md" className="mt-5" />
           </div>
 
           <nav aria-label="Plan du site" className="lg:col-span-2">
             <h2 className="text-small font-semibold text-white">Navigation</h2>
-            <ul className="mt-5 space-y-3 text-small">
+            <ul className="mt-3 space-y-1.5 text-small">
               {mainNav.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="transition-colors hover:text-white">
@@ -82,7 +83,7 @@ export function Footer({ openingDays }: { openingDays: OpeningDay[] }) {
 
           <nav aria-label="Soins" className="lg:col-span-3">
             <h2 className="text-small font-semibold text-white">Soins conventionnés</h2>
-            <ul className="mt-5 space-y-3 text-small">
+            <ul className="mt-3 space-y-1.5 text-small">
               {services.map((s) => (
                 <li key={s.slug}>
                   <Link href={`/soins/${s.slug}`} className="transition-colors hover:text-white">
@@ -91,12 +92,12 @@ export function Footer({ openingDays }: { openingDays: OpeningDay[] }) {
                 </li>
               ))}
             </ul>
-            <h2 className="mt-8 text-small font-semibold text-white">
+            <h2 className="mt-5 text-small font-semibold text-white">
               <Link href="/soins-non-conventionnes" className="transition-colors hover:text-white/80">
                 Soins non conventionnés
               </Link>
             </h2>
-            <ul className="mt-5 space-y-3 text-small">
+            <ul className="mt-3 space-y-1.5 text-small">
               {nonConventionnes.map((c) => (
                 <li key={c.slug}>
                   <Link href={`/soins-non-conventionnes/${c.slug}`} className="transition-colors hover:text-white">
@@ -108,12 +109,17 @@ export function Footer({ openingDays }: { openingDays: OpeningDay[] }) {
           </nav>
 
           <div className="lg:col-span-3">
-            <h2 className="text-small font-semibold text-white">Horaires</h2>
-            <OpeningHours days={openingDays} tone="light" className="mt-3" />
+            <details className="group rounded-control border border-white/15">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-small font-semibold text-white hover:bg-white/5 [&::-webkit-details-marker]:hidden">
+                Horaires d&apos;ouverture
+                <Icon name="chevronDown" size={16} aria-hidden="true" className="shrink-0 transition-transform group-open:rotate-180" />
+              </summary>
+              <OpeningHours days={openingDays} tone="light" className="border-t border-white/10 px-4" />
+            </details>
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:gap-6">
+        <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:gap-6">
           <span className="inline-flex w-fit rounded-control bg-white px-4 py-2">
             <Image quality={90}
               src="/images/logo-ordre-mk.png"
@@ -121,7 +127,7 @@ export function Footer({ openingDays }: { openingDays: OpeningDay[] }) {
               width={1126}
               height={324}
               sizes="240px"
-              className="h-12 w-auto sm:h-14"
+              className="h-9 w-auto sm:h-10"
             />
           </span>
           {isSet(practitioner.rpps) && (
@@ -131,7 +137,7 @@ export function Footer({ openingDays }: { openingDays: OpeningDay[] }) {
           )}
         </div>
 
-        <div className="mt-8 flex flex-col gap-6 border-t border-white/10 pt-8 text-micro text-white/60 md:flex-row md:items-center md:justify-between">
+        <div className="mt-6 flex flex-col gap-4 border-t border-white/10 pt-6 text-micro text-white/60 md:flex-row md:items-center md:justify-between">
           <p>
             © {year} {isSet(SITE.CABINET_NAME) ? SITE.CABINET_NAME : SITE.PRACTITIONER_NAME}
           </p>
