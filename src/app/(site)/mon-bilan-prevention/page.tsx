@@ -114,7 +114,7 @@ export default function MonBilanPreventionPage() {
               </ol>
             </nav>
             <p className="enter inline-flex items-center gap-3 rounded-full bg-petrol-soft py-1.5 pl-1.5 pr-5 text-micro font-semibold uppercase tracking-[0.16em] text-petrol lg:mt-8">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/70">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-surface/80">
                 <Icon name="shield" size={18} />
               </span>
               Prévention &amp; bien-être

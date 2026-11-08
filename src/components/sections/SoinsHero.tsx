@@ -104,7 +104,7 @@ export function SoinsHero({ badge, title, intro, features = [], image, card, act
               </ol>
             </nav>
             <p className="enter inline-flex items-center gap-3 rounded-full bg-petrol-soft py-1.5 pl-1.5 pr-5 text-micro font-semibold uppercase tracking-[0.14em] text-petrol lg:mt-8">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/70">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-surface/80">
                 <Icon name={badge.icon} size={18} />
               </span>
               {badge.label}
@@ -160,7 +160,7 @@ export function SoinsHero({ badge, title, intro, features = [], image, card, act
               aria-labelledby="soins-hero-card"
               className={cn(
                 "enter self-center rounded-panel p-6 shadow-lift sm:p-7",
-                dark ? "on-dark bg-petrol-deep text-white" : "border border-white/70 bg-white/85 backdrop-blur-md",
+                dark ? "on-dark bg-petrol-deep text-white" : "border border-line bg-surface/90 backdrop-blur-md",
               )}
               style={delay(260)}
             >
